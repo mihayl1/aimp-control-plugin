@@ -53,6 +53,9 @@
     <Filter Include="src\sqlite">
       <UniqueIdentifier>{49dc5284-c8e9-471f-9f24-a4cf8fc422ad}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\websocket">
+      <UniqueIdentifier>{9214d302-90bd-44b4-b535-8a44241a20ff}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\stdafx.cpp">
@@ -168,6 +171,9 @@
     </ClCompile>
     <ClCompile Include="..\src\sqlite\sqlite3.c">
       <Filter>src\sqlite</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\websocket\websocket_server.cpp">
+      <Filter>src\websocket</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -356,6 +362,9 @@
     </ClInclude>
     <ClInclude Include="..\src\sqlite\sqlite3ext.h">
       <Filter>src\sqlite</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\websocket\server.h">
+      <Filter>src\websocket</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
