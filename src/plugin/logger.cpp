@@ -15,17 +15,19 @@
 
 namespace ControlPlugin { namespace PluginLogger {
 
-const std::string LogManager::kRPC_SERVER_MODULE_NAME =   "rpc_server";
-const std::string LogManager::kHTTP_SERVER_MODULE_NAME =  "http_server";
-const std::string LogManager::kAIMP_MANAGER_MODULE_NAME = "aimp_manager";
-const std::string LogManager::kPLUGIN_MODULE_NAME =       "plugin";
+const std::string LogManager::kRPC_SERVER_MODULE_NAME       = "rpc_server";
+const std::string LogManager::kHTTP_SERVER_MODULE_NAME      = "http_server";
+const std::string LogManager::kWEBSOCKET_SERVER_MODULE_NAME = "websocket_server";
+const std::string LogManager::kAIMP_MANAGER_MODULE_NAME     = "aimp_manager";
+const std::string LogManager::kPLUGIN_MODULE_NAME           = "plugin";
 
 LogManager::LogManager()
     : severity_(severity_levels_count),
       plugin_lg_(keywords::channel = kPLUGIN_MODULE_NAME),
       aimp_manager_lg_(keywords::channel = kAIMP_MANAGER_MODULE_NAME),
       rpc_server_lg_(keywords::channel = kRPC_SERVER_MODULE_NAME),
-      http_server_lg_(keywords::channel = kHTTP_SERVER_MODULE_NAME)
+      http_server_lg_(keywords::channel = kHTTP_SERVER_MODULE_NAME),
+      websocket_server_lg_(keywords::channel = kWEBSOCKET_SERVER_MODULE_NAME)
 {}
 
 LogManager::~LogManager()
@@ -260,6 +262,12 @@ template<>
 ModuleLoggerType& LogManager::getModuleLogger<Http::Server>()
 {
     return http_server_lg_;
+}
+
+template<>
+ModuleLoggerType& LogManager::getModuleLogger<Websocket::Server>()
+{
+    return websocket_server_lg_;
 }
 
 } } // namespace ControlPlugin::PluginLogger

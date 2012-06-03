@@ -156,6 +156,7 @@
     <ClCompile Include="..\src\utils\util.cpp" />
     <ClCompile Include="..\src\webctlrpc\webctlrpc_request_parser.cpp" />
     <ClCompile Include="..\src\webctlrpc\webctlrpc_response_serializer.cpp" />
+    <ClCompile Include="..\src\websocket\websocket_server.cpp" />
     <ClCompile Include="..\src\xmlrpc\parse_util.cpp" />
     <ClCompile Include="..\src\xmlrpc\xmlrpc_request_parser.cpp" />
     <ClCompile Include="..\src\xmlrpc\xmlrpc_response_serializer.cpp" />
@@ -219,6 +220,7 @@
     <ClInclude Include="..\src\webctlrpc\frontend.h" />
     <ClInclude Include="..\src\webctlrpc\request_parser.h" />
     <ClInclude Include="..\src\webctlrpc\response_serializer.h" />
+    <ClInclude Include="..\src\websocket\server.h" />
     <ClInclude Include="..\src\xmlrpc\frontend.h" />
     <ClInclude Include="..\src\xmlrpc\request_parser.h" />
     <ClInclude Include="..\src\xmlrpc\response_serializer.h" />

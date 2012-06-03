@@ -19,11 +19,12 @@
 		-->
 		<severity>critical</severity>
         
-		<!-- Modules where logging is enabled. Currently plugin consists of 4 modules: plugin, aimp_manager, http_server, rpc_server. -->
+		<!-- Modules where logging is enabled. Currently plugin consists of 5 modules: plugin, aimp_manager, http_server, websocket_server, rpc_server. -->
 		<modules>
 			<module>plugin</module>
 			<module>aimp_manager</module>
 			<module>http_server</module>
+            <module>websocket_server</module>
 			<module>rpc_server</module>
 		</modules>
 	</logging>
