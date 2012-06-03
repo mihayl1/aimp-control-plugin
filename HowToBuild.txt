@@ -37,6 +37,12 @@ Details:
     To rebuild library use "bjam --with-XXX --clean" command, then build as usual.
     To choose VS version use "--toolset=XXX", when XXX can be following: msvc-9.0, msvc-10.0.
 
+Websocketpp
+
+    5.1) Download sources from https://github.com/zaphoyd/websocketpp
+    5.2) Tune visual studio project:
+        5.2.1) For Debug configuration: in Project Settings->C++->Code Generation set 'Runtime Library' to 'Multi-threaded Debug DLL', 'Enable Enhanced Instruction Set' to 'Not Set'.
+        
 Python
 
 Download and install Python 2.7 and module lxml for this version.
