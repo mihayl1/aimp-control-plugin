@@ -75,9 +75,15 @@ Download and install from http://sourceforge.net/projects/win32svn
 Used for creating PDB file with links to source files in SVN repository. Usefull for debugging.
 
 FreeImage
+
 Download FreeImage DLL(for example, FreeImage 3.15.0 [WIN32]) from http://freeimage.sourceforge.net/download.html and unzip to some folder.
 If you do not want use precompiled package you can download source distribution.
 Requiired only for enabling Rpc function which extracts album cover.
+
+Doxygen
+
+Download and install from http://www.stack.nl/~dimitri/doxygen/download.html#latestsrc
+Used to document RPC calls - PluginRpcFunctions.chm.
 
 After installing software mentioned above set actual paths in setup_environment.bat and setup_vs_project_variables.bat scripts.
 
