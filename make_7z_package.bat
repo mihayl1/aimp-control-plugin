@@ -8,8 +8,8 @@ call build_plugin.bat || goto ERROR_HANDLER
 set PROJECT_VERSION_FILE=version.txt
 set ARCHIVER=tools\7zip\7z
 
-:CREATE_ARCHIEVE
-    echo Creating archieve...
+:CREATE_ARCHIVE
+    echo Creating archive...
     set /p PROJECT_VERSION_TEMP= < %PROJECT_VERSION_FILE% || set PROJECT_VERSION_TEMP=unknown_version
     set PROJECT_VERSION=!PROJECT_VERSION_TEMP:.=_!
     set FULLPATH_ZIP=%TEMP_BUILD_DIR%\aimp_control_plugin_!PROJECT_VERSION!.7z
@@ -28,11 +28,11 @@ set ARCHIVER=tools\7zip\7z
     copy /Y .\HowToSetupPluginFrom7zPackage.txt .\%TEMP_BUILD_DIR%\Readme.txt || goto ERROR_HANDLER 
     %ARCHIVER% a -t7z !FULLPATH_ZIP! ^
              .\%TEMP_BUILD_DIR%\Readme.txt || goto ERROR_HANDLER
-echo Archieve created.
+echo Archive created.
 exit /B
 
 
 :ERROR_HANDLER
     set ORIGINAL_ERROR_LEVEL=%ERRORLEVEL%
-    echo Archieve creation failed. Error code %ORIGINAL_ERROR_LEVEL%
+    echo Archive creation failed. Error code %ORIGINAL_ERROR_LEVEL%
     exit /B %ORIGINAL_ERROR_LEVEL%
