@@ -85,6 +85,9 @@ Doxygen
 Download and install from http://www.stack.nl/~dimitri/doxygen/download.html#latestsrc
 Used to document RPC calls - PluginRpcFunctions.chm.
 
+Java runtime
+Use jre6 instead jre7. It seems python subprocess does not work with jre7.
+
 After installing software mentioned above set actual paths in setup_environment.bat and setup_vs_project_variables.bat scripts.
 
 
