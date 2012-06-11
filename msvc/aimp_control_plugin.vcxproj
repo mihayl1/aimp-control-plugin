@@ -112,6 +112,7 @@
     <ClCompile Include="..\src\sqlite\sqlite3.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Level3</WarningLevel>
+      <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Level3</WarningLevel>
     </ClCompile>
     <ClCompile Include="..\src\aimp\entries_sorter.cpp" />
     <ClCompile Include="..\src\aimp\manager2_impl.cpp" />
