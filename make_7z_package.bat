@@ -6,6 +6,7 @@ call build_plugin.bat || goto ERROR_HANDLER
 :: Notice that variables TEMP_BUILD_DIR and CLIENT_SRC_RELEASE_DIR are set in build_plugin.bat script.
 
 set PROJECT_VERSION_FILE=version.txt
+set ARCHIVER=tools\7zip\7z
 
 :CREATE_ARCHIEVE
     echo Creating archieve...
@@ -14,18 +15,18 @@ set PROJECT_VERSION_FILE=version.txt
     set FULLPATH_ZIP=%TEMP_BUILD_DIR%\aimp_control_plugin_!PROJECT_VERSION!.7z
     
     :: add htdocs
-    tools\7z a -t7z !FULLPATH_ZIP! ^
+    %ARCHIVER% a -t7z !FULLPATH_ZIP! ^
              .\%CLIENT_SRC_RELEASE_DIR% || goto ERROR_HANDLER
     :: and plugin DLL
-    tools\7z a -t7z !FULLPATH_ZIP! ^
+    %ARCHIVER% a -t7z !FULLPATH_ZIP! ^
              .\%TEMP_BUILD_DIR%\aimp_control_plugin.dll || goto ERROR_HANDLER         
     :: and default settings.dat
     copy /Y .\inno_setup_data\default_settings.dat .\%TEMP_BUILD_DIR%\settings.dat || goto ERROR_HANDLER 
-    tools\7z a -t7z !FULLPATH_ZIP! ^
+    %ARCHIVER% a -t7z !FULLPATH_ZIP! ^
              .\%TEMP_BUILD_DIR%\settings.dat || goto ERROR_HANDLER             
     :: and Readme.dat
     copy /Y .\HowToSetupPluginFrom7zPackage.txt .\%TEMP_BUILD_DIR%\Readme.txt || goto ERROR_HANDLER 
-    tools\7z a -t7z !FULLPATH_ZIP! ^
+    %ARCHIVER% a -t7z !FULLPATH_ZIP! ^
              .\%TEMP_BUILD_DIR%\Readme.txt || goto ERROR_HANDLER
 echo Archieve created.
 exit /B
