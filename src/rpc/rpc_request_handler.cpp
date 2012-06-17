@@ -58,7 +58,7 @@ void RequestHandler::addMethod(std::auto_ptr<Method> method)
 
 boost::tribool RequestHandler::handleRequest(const std::string& request_uri,
                                              const std::string& request_content,
-                                             Http::DelayedResponseSender_ptr delayed_response_sender,
+                                             Transport::ResponseSender_ptr delayed_response_sender,
                                              Frontend& frontend,
                                              std::string* response,
                                              std::string* response_content_type
@@ -88,7 +88,7 @@ boost::tribool RequestHandler::handleRequest(const std::string& request_uri,
 }
 
 boost::tribool RequestHandler::callMethod(const Value& root_request,
-                                          Http::DelayedResponseSender_ptr delayed_response_sender,
+                                          Transport::ResponseSender_ptr delayed_response_sender,
                                           ResponseSerializer& response_serializer,
                                           std::string* response
                                           )
@@ -139,7 +139,7 @@ boost::tribool RequestHandler::callMethod(const Value& root_request,
 
 boost::shared_ptr<DelayedResponseSender> RequestHandler::getDelayedResponseSender() const
 {
-    boost::shared_ptr<Http::DelayedResponseSender> ptr = active_delayed_response_sender_.lock();
+    boost::shared_ptr<Transport::ResponseSender> ptr = active_delayed_response_sender_.lock();
     if (ptr) {
         return boost::make_shared<DelayedResponseSender>(ptr, *active_response_serializer_);
     } else {
@@ -152,18 +152,18 @@ void DelayedResponseSender::sendResponseSuccess(const Value& root_response)
 {
     std::string response;
     response_serializer_.serializeSuccess(root_response, &response);
-    comet_http_response_sender_->send(response,
-                                      response_serializer_.mimeType()
-                                      );
+    transport_response_sender_->send(response,
+                                     response_serializer_.mimeType()
+                                     );
 }
 
 void DelayedResponseSender::sendResponseFault(const Value& root_request, const std::string& error_msg, int error_code)
 {
     std::string response_string;
     response_serializer_.serializeFault(root_request, error_msg, error_code, &response_string);
-    comet_http_response_sender_->send(response_string,
-                                      response_serializer_.mimeType()
-                                      );
+    transport_response_sender_->send(response_string,
+                                     response_serializer_.mimeType()
+                                     );
 }
 
 } // namespace XmlRpc

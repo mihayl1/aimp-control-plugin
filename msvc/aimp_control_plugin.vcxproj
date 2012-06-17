@@ -164,6 +164,7 @@
     <ClCompile Include="..\src\xmlrpc\xmlrpc_value.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\src\rpc\transport_sender.h" />
     <ClInclude Include="..\src\sqlite\sqlite3.h" />
     <ClInclude Include="..\src\sqlite\sqlite3ext.h" />
     <ClInclude Include="..\src\aimp\aimp2_sdk.h" />

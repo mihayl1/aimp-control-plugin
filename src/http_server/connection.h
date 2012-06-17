@@ -14,6 +14,7 @@
 #include "reply.h"
 #include "request.h"
 #include "request_parser.h"
+#include "rpc/transport_sender.h"
 
 namespace Http {
 
@@ -85,7 +86,7 @@ class ICometDelayedConnection
 public:
     virtual ~ICometDelayedConnection() {}
 
-    virtual void sendResponse(boost::shared_ptr<Http::DelayedResponseSender> comet_http_response_sender) = 0;
+    virtual void sendResponse(boost::shared_ptr<Http::DelayedResponseSender> response_sender) = 0;
 };
 
 typedef boost::shared_ptr<ICometDelayedConnection> ICometDelayedConnection_ptr;
@@ -102,11 +103,11 @@ public:
         connection_(connection)
     {}
 
-    virtual void sendResponse(boost::shared_ptr<Http::DelayedResponseSender> comet_http_response_sender);
+    virtual void sendResponse(boost::shared_ptr<Http::DelayedResponseSender> response_sender);
 
 private:
 
-    void handle_write(boost::shared_ptr<Http::DelayedResponseSender> comet_http_response_sender, const boost::system::error_code& e);
+    void handle_write(boost::shared_ptr<Http::DelayedResponseSender> response_sender, const boost::system::error_code& e);
 
     ConnectionType_ptr connection_;
 };

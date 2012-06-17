@@ -254,14 +254,14 @@ void Connection<SocketT>::handle_write_headers_on_file_sending(const boost::syst
 }
 
 template <typename SocketT>
-void CometDelayedConnection<SocketT>::sendResponse(DelayedResponseSender_ptr comet_http_response_sender)
+void CometDelayedConnection<SocketT>::sendResponse(DelayedResponseSender_ptr response_sender)
 {
     BOOST_LOG_SEV(logger(), debug) << "CometDelayedConnection::sendResponse to " << connection_->socket().remote_endpoint();
     boost::asio::async_write( connection_->socket(),
-                              comet_http_response_sender->get_reply().to_buffers(),
+                              response_sender->get_reply().to_buffers(),
                               connection_->strand_.wrap(boost::bind(&CometDelayedConnection<SocketT>::handle_write,
                                                                     shared_from_this(),
-                                                                    comet_http_response_sender,
+                                                                    response_sender,
                                                                     boost::asio::placeholders::error
                                                                     )
                                                          )
@@ -269,7 +269,7 @@ void CometDelayedConnection<SocketT>::sendResponse(DelayedResponseSender_ptr com
 }
 
 template <typename SocketT>
-void CometDelayedConnection<SocketT>::handle_write(DelayedResponseSender_ptr comet_http_response_sender, const boost::system::error_code& e)
+void CometDelayedConnection<SocketT>::handle_write(DelayedResponseSender_ptr response_sender, const boost::system::error_code& e)
 {
     if (!e) {
         BOOST_LOG_SEV(logger(), debug) << "CometDelayedConnection::success sending response to " << connection_->socket().remote_endpoint();

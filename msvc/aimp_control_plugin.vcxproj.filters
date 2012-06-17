@@ -366,6 +366,9 @@
     <ClInclude Include="..\src\websocket\server.h">
       <Filter>src\websocket</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\rpc\transport_sender.h">
+      <Filter>src\rpc_server\general</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\src\control_plugin.def">
