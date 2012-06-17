@@ -51,11 +51,11 @@ bool RequestHandler::handle_request(const Request& req, Reply& rep, ICometDelaye
 
     if ( Rpc::Frontend* frontend = rpc_request_handler_.getFrontEnd(req.uri) ) { // handle RPC call.        
         std::string response_content_type;
-        DelayedResponseSender_ptr comet_delayed_response_sender( new DelayedResponseSender(connection, *this) );
+        Transport::ResponseSender_ptr delayed_response_sender( new DelayedResponseSender(connection, *this) );
 
         boost::tribool result = rpc_request_handler_.handleRequest(req.uri,
                                                                    req.content,
-                                                                   comet_delayed_response_sender,
+                                                                   delayed_response_sender,
                                                                    *frontend,
                                                                    &rep.content,
                                                                    &response_content_type

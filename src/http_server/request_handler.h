@@ -12,6 +12,7 @@
 #include <map>
 #include <boost/noncopyable.hpp>
 #include "connection.h"
+#include "rpc/transport_sender.h"
 
 // headers for DelayedResponseSender class
 #include <boost/enable_shared_from_this.hpp>
@@ -73,7 +74,7 @@ private:
 
 class ClientDescriptor;
 
-class DelayedResponseSender : public boost::enable_shared_from_this<DelayedResponseSender>, private boost::noncopyable
+class DelayedResponseSender : public Transport::ResponseSender, public boost::enable_shared_from_this<DelayedResponseSender>, private boost::noncopyable
 {
 public:
     DelayedResponseSender(ICometDelayedConnection_ptr comet_connection,
@@ -83,7 +84,7 @@ public:
         http_request_handler_(http_request_handler)
     {}
 
-    void send(const std::string& response, const std::string& response_content_type);
+    virtual void send(const std::string& response, const std::string& response_content_type);
 
     const Reply& get_reply() const;
 

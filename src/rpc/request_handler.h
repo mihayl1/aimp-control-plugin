@@ -8,6 +8,7 @@
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
+#include "rpc/transport_sender.h"
 
 // headers of DelayedResponseSender class
 #include <boost/enable_shared_from_this.hpp>
@@ -43,7 +44,7 @@ public:
 
     boost::tribool handleRequest(const std::string& request_uri,
                                  const std::string& request_content,
-                                 boost::shared_ptr<Http::DelayedResponseSender> delayed_response_sender,
+                                 boost::shared_ptr<Transport::ResponseSender> delayed_response_sender,
                                  Frontend& frontend,
                                  std::string* response,
                                  std::string* response_content_type
@@ -52,7 +53,7 @@ public:
 private:
 
     boost::tribool callMethod(const Value& root,
-                              boost::shared_ptr<Http::DelayedResponseSender> delayed_response_sender,
+                              boost::shared_ptr<Transport::ResponseSender> delayed_response_sender,
                               ResponseSerializer& response_serializer,
                               std::string* response
                               );
@@ -66,7 +67,7 @@ private:
     typedef boost::ptr_map<std::string, Method> RPCMethodsMap; // maps method name to pointer to method object.
     RPCMethodsMap rpc_methods_; // List of RPC methods.
 
-    boost::weak_ptr<Http::DelayedResponseSender> active_delayed_response_sender_; // stores response sender while Rpc method is executed. Allows not to pass this handler in Method::execute() as argument since only comet method needs it.
+    boost::weak_ptr<Transport::ResponseSender> active_delayed_response_sender_; // stores response sender while Rpc method is executed. Allows not to pass this handler in Method::execute() as argument since only comet method needs it.
     ResponseSerializer* active_response_serializer_; // work in pair with active_delayed_response_sender_ member.
 };
 
@@ -76,11 +77,11 @@ class DelayedResponseSender : public boost::enable_shared_from_this<DelayedRespo
 {
 public:
 
-    DelayedResponseSender(boost::shared_ptr<Http::DelayedResponseSender> comet_http_response_sender,
+    DelayedResponseSender(boost::shared_ptr<Transport::ResponseSender> transport_response_sender,
                           const ResponseSerializer& response_serializer
                           )
         :
-        comet_http_response_sender_(comet_http_response_sender),
+        transport_response_sender_(transport_response_sender),
         response_serializer_(response_serializer)
     {}
 
@@ -90,7 +91,7 @@ public:
 
 private:
 
-    boost::shared_ptr<Http::DelayedResponseSender> comet_http_response_sender_;
+    boost::shared_ptr<Transport::ResponseSender> transport_response_sender_;
     const ResponseSerializer& response_serializer_;
 };
 
