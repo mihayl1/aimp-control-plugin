@@ -157,7 +157,10 @@
     <ClCompile Include="..\src\utils\util.cpp" />
     <ClCompile Include="..\src\webctlrpc\webctlrpc_request_parser.cpp" />
     <ClCompile Include="..\src\webctlrpc\webctlrpc_response_serializer.cpp" />
-    <ClCompile Include="..\src\websocket\websocket_server.cpp" />
+    <ClCompile Include="..\src\websocket\websocket_server.cpp">
+      <DisableSpecificWarnings Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">4503;4714;4355;</DisableSpecificWarnings>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
     <ClCompile Include="..\src\xmlrpc\parse_util.cpp" />
     <ClCompile Include="..\src\xmlrpc\xmlrpc_request_parser.cpp" />
     <ClCompile Include="..\src\xmlrpc\xmlrpc_response_serializer.cpp" />

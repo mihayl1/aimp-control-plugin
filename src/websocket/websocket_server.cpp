@@ -48,12 +48,27 @@ Server::Server( const std::string& address,
     :
 	impl_( new impl(request_handler) )
 {
+    server& server = impl_->server_;
+    server.alog().unset_level(websocketpp::log::alevel::ALL);
+    server.elog().unset_level(websocketpp::log::elevel::ALL);
+        
+    server.alog().set_level(websocketpp::log::alevel::CONNECT);
+    server.alog().set_level(websocketpp::log::alevel::DISCONNECT);
+        
+    server.elog().set_level(websocketpp::log::elevel::RERROR);
+    server.elog().set_level(websocketpp::log::elevel::FATAL);
+        
     address;
-    port;
+    const unsigned short port_num = boost::lexical_cast<unsigned short>(port);
+    server.listen(port_num, 1); // address is not used since error C2666: 'websocketpp::role::server<endpoint>::listen' : 2 overloads have similar conversions
 }
 
 Server::~Server()
 {
+}
+
+boost::asio::io_service& Server::io_service() {
+    return impl_->server_.io_service();
 }
 
 } // namespace Websocket

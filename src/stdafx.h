@@ -7,6 +7,8 @@
 #define NOMINMAX             // Disable max/min macroses.
 #define WIN32_LEAN_AND_MEAN  // Exclude rarely-used stuff from Windows headers.
 
+#define _SCL_SECURE_NO_WARNINGS // special for websocketpp lib, remove if it is not used.
+
 #pragma warning (push, 3)
 
 #include <windows.h>

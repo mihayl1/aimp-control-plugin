@@ -1,6 +1,8 @@
 #ifndef WEBSOCKET_SERVER_H
 #define WEBSOCKET_SERVER_H
 
+#include <boost/asio.hpp>
+
 namespace Rpc {
 class RequestHandler;
 }
@@ -20,6 +22,8 @@ public:
            ); // throws std::runtime_error.
 
     ~Server();
+
+    boost::asio::io_service& io_service();
 
 private:
 

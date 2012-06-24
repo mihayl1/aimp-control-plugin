@@ -643,12 +643,14 @@ void AIMPControlPlugin::onTick()
 {
     try {
         server_io_service_->poll();
+        websocket_server_->io_service().poll();
         { // for tests
             using namespace AIMPPlayer;
             if (aimp_manager_) {
                 aimp_manager_->onTick();
             }
         }
+        
     } catch (std::exception& e) {
         // Just send error in log and stop processing.
         BOOST_LOG_SEV(logger(), critical) << "Unhandled exception inside ControlPlugin::onTick(): " << e.what();
