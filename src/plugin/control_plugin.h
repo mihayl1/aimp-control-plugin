@@ -141,6 +141,7 @@ private:
     boost::shared_ptr<Http::RequestHandler> http_request_handler_; //!< Http request handler, used by Http::Server object.
     boost::shared_ptr<boost::asio::io_service> server_io_service_;
     boost::shared_ptr<Http::Server> server_; //!< Simple Http server.
+    boost::shared_ptr<Websocket::Server> websocket_server_;
 
     boost::shared_ptr<AIMPPlayer::AIMPManager> aimp_manager_; //!< AIMP player manager.
 

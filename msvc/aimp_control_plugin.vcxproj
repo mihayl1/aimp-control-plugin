@@ -222,6 +222,7 @@
     <ClInclude Include="..\src\webctlrpc\frontend.h" />
     <ClInclude Include="..\src\webctlrpc\request_parser.h" />
     <ClInclude Include="..\src\webctlrpc\response_serializer.h" />
+    <ClInclude Include="..\src\websocket\endpoint.h" />
     <ClInclude Include="..\src\websocket\server.h" />
     <ClInclude Include="..\src\xmlrpc\frontend.h" />
     <ClInclude Include="..\src\xmlrpc\request_parser.h" />

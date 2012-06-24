@@ -719,30 +719,30 @@ AIMP2Manager::StatusValue AIMP2Manager::getStatus(AIMP2Manager::STATUS status) c
 
 void AIMP2Manager::onTick()
 {
-    struct StatusDesc { int key, value; };
-    static bool inited = false;
-    const int status_count = STATUS_LAST - STATUS_FIRST - 1;
-    static StatusDesc status_desc[status_count];
-    if (!inited) {
-        inited = true;
-        for(int i = 0; i != status_count; ++i) {
-            StatusDesc& desc = status_desc[i];
-            desc.key = STATUS_FIRST + i + 1;
-            desc.value = aimp2_controller_->AIMP_Status_Get(desc.key);
-        }
-    }
+    //struct StatusDesc { int key, value; };
+    //static bool inited = false;
+    //const int status_count = STATUS_LAST - STATUS_FIRST - 1;
+    //static StatusDesc status_desc[status_count];
+    //if (!inited) {
+    //    inited = true;
+    //    for(int i = 0; i != status_count; ++i) {
+    //        StatusDesc& desc = status_desc[i];
+    //        desc.key = STATUS_FIRST + i + 1;
+    //        desc.value = aimp2_controller_->AIMP_Status_Get(desc.key);
+    //    }
+    //}
 
-    for(int i = 0; i != status_count; ++i) {
-        StatusDesc& desc = status_desc[i];
-        const int status = desc.key;
-        const int new_value = aimp2_controller_->AIMP_Status_Get(status);
-        if (desc.value != new_value) {
-            if (STATUS_POS != desc.key) {
-                BOOST_LOG_SEV(logger(), debug) << "status(STATUS_" << asString(status) << ") changed from " << desc.value << " to " << new_value;
-            }
-            desc.value = new_value;
-        }
-    }
+    //for(int i = 0; i != status_count; ++i) {
+    //    StatusDesc& desc = status_desc[i];
+    //    const int status = desc.key;
+    //    const int new_value = aimp2_controller_->AIMP_Status_Get(status);
+    //    if (desc.value != new_value) {
+    //        if (STATUS_POS != desc.key) {
+    //            BOOST_LOG_SEV(logger(), debug) << "status(STATUS_" << asString(status) << ") changed from " << desc.value << " to " << new_value;
+    //        }
+    //        desc.value = new_value;
+    //    }
+    //}
 }
 
 std::string AIMP2Manager::getAIMPVersion() const

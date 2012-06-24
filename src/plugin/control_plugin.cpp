@@ -15,6 +15,7 @@
 #include "http_server/request_handler.h"
 #include "http_server/request_handler.h"
 #include "http_server/server.h"
+#include "websocket/server.h"
 #include "download_track/request_handler.h"
 #include "utils/string_encoding.h"
 
@@ -368,6 +369,16 @@ HRESULT AIMPControlPlugin::initialize()
                                        )
                       );
 
+        // create Websocket server.
+        const unsigned short http_server_port = boost::lexical_cast<unsigned short>(settings_manager_.settings().http_server.port);
+        assert(http_server_port != UINT16_MAX);
+        const std::string websocket_server_port = boost::lexical_cast<std::string>(http_server_port + 1);
+        
+        websocket_server_.reset(new Websocket::Server(settings_manager_.settings().http_server.ip_to_bind,
+                                                      websocket_server_port,
+                                                      *rpc_request_handler_
+                                                      )
+                                );
         startTickTimer();
     } catch (boost::thread_resource_error& e) {
         BOOST_LOG_SEV(logger(), critical) << "Plugin initialization failed. Reason: create main server thread failed. Reason: " << e.what();
@@ -390,6 +401,12 @@ HRESULT AIMPControlPlugin::Finalize()
     BOOST_LOG_SEV(logger(), info) << "Plugin finalization is started";
 
     stopTickTimer();
+
+    if (websocket_server_) {
+        // stop the websocket server.
+        BOOST_LOG_SEV(logger(), info) << "Stopping websocket server."; 
+        websocket_server_.reset();
+    }
 
     server_io_service_->stop();
     
