@@ -109,6 +109,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\src\jsonrpc\json_frontend.cpp" />
     <ClCompile Include="..\src\sqlite\sqlite3.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Level3</WarningLevel>

@@ -175,6 +175,9 @@
     <ClCompile Include="..\src\websocket\websocket_server.cpp">
       <Filter>src\websocket</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\jsonrpc\json_frontend.cpp">
+      <Filter>src\rpc_server\json</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\stdafx.h">

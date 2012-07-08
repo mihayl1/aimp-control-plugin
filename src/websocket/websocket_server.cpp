@@ -4,6 +4,8 @@
 
 #include <websocketpp.hpp>
 #include "endpoint.h"
+#include "jsonrpc/frontend.h"
+#include "rpc/request_handler.h"
 
 namespace {
 using namespace ControlPlugin::PluginLogger;
@@ -17,27 +19,52 @@ namespace Websocket
 using ControlPlugin::PluginLogger::LogManager;
 
 typedef aimp_endpoint<websocketpp::role::server,
-                                   websocketpp::socket::plain> server;
+                      websocketpp::socket::plain> server;
 
-class echo_server_handler : public server::handler {
+class handler : public server::handler, private boost::noncopyable
+{
 public:
-    void on_message(connection_ptr con, message_ptr msg) {
-        con->send(msg->get_payload(), msg->get_opcode());
+
+    void on_message(connection_ptr connection, message_ptr msg)
+    {
+        //con->send(msg->get_payload(), msg->get_opcode());   
+        std::string response_content_type,
+                    reply_content;
+        //Transport::ResponseSender_ptr delayed_response_sender( new DelayedResponseSender(connection, *this) );
+
+        //boost::tribool result = request_handler_.handleRequest(JsonRpc::Frontend::URI,
+        //                                                       msg->get_payload(),
+        //                                                       delayed_response_sender,
+        //                                                       frontend_,
+        //                                                       &reply_content,
+        //                                                       &response_content_type
+        //                                                       );
+        //if (result || !result) {
+        //fillReplyWithContent(response_content_type, rep);
+        
     }
+
+    handler(Rpc::RequestHandler& request_handler)
+        :
+        request_handler_(request_handler),
+        frontend_( *request_handler_.getFrontEnd(JsonRpc::Frontend::URI) )
+    {}
+
+private:
+
+    Rpc::RequestHandler& request_handler_;
+    Rpc::Frontend& frontend_;
 };
 
 struct Server::impl : boost::noncopyable
 {
-	impl(Rpc::RequestHandler& request_handler
-		 )
+	impl(Rpc::RequestHandler& request_handler)
         :
-        request_handler_(request_handler),
-        server_( server::handler::ptr( new echo_server_handler() ) )
+        server_( server::handler::ptr( new handler(request_handler) ) )
 	{
 
 	}
 
-    Rpc::RequestHandler& request_handler_;
     server server_;
 };
 
@@ -67,7 +94,8 @@ Server::~Server()
 {
 }
 
-boost::asio::io_service& Server::io_service() {
+boost::asio::io_service& Server::io_service()
+{
     return impl_->server_.io_service();
 }
 

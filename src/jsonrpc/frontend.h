@@ -13,9 +13,10 @@ namespace JsonRpc
 class Frontend : public Rpc::Frontend
 {
 public:
+    static const std::string URI;
 
     virtual bool canHandleRequest(const std::string& uri) const
-        { return uri == "/RPC_JSON"; }
+        { return uri == URI; }
 
     virtual Rpc::RequestParser& requestParser()
         { return request_parser_; }
