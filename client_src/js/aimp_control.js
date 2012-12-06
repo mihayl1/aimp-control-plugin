@@ -281,6 +281,17 @@ function tryToLocateCurrentTrackInPlaylist(entry_page_number, entry_index_on_pag
 	}
 }
 
+function getTrackForRatingSetTable(node) {
+    var rating_div = node.parentNode;
+    var parts = rating_div.id.split('_');
+
+    var playlist_id = parseInt(parts[2]);
+    var track_id    = parseInt(parts[3]);
+    return { 'playlist_id': playlist_id,
+	     'track_id': track_id
+	   };
+}	
+
 function onPlaylistTableDraw(oSettings) {
 	addControlMenuToEachEntry(oSettings);
 	
@@ -295,7 +306,7 @@ function onPlaylistTableDraw(oSettings) {
 	
 	// init all rating widgets in table
 	$('div[id^="track_rating_"]', $table).each(function(index, rating_div) {
-		initStarRatingWidget(rating_div.id);
+	    initStarRatingWidget(rating_div.id, getTrackForRatingSetTable);
 	});
 }
 
@@ -358,14 +369,11 @@ function getControlMenuDescriptor(nTr)
 	var enqueue_entry_button_id = 'enqueue_entry_' + entry_id;
 	var remove_from_queue_entry_button_id = 'remove_from_queue_entry_' + entry_id;
 	var download_track_button_id = 'download_track_entry_' + entry_id;
-	var control_menu_html =   '<table cellpadding="5" cellspacing="0" border="0">'
-							+ '<tr>'
-							+ '<td><button id="' + play_button_id + '"></button></td>'
-							+ '<td><button id="' + enqueue_entry_button_id + '"></button></td>'
-							+ '<td><button id="' + remove_from_queue_entry_button_id + '"></button></td>'
-							+ '<td><button id="' + download_track_button_id + '"></button></td>'
-							+ '</tr>'
-							+ '</table>';
+	var control_menu_html = '<button id="' + play_button_id + '"></button>'
+							+ '<button id="' + enqueue_entry_button_id + '"></button>'
+							+ '<button id="' + remove_from_queue_entry_button_id + '"></button>'
+							+ '<button id="' + download_track_button_id + '"></button>'
+                            ;
 
 	return {
 		html : control_menu_html,
@@ -397,6 +405,7 @@ function onContextMenuButtonClick() {
 								   label: getText('track_contol_menu_open')
 								 }
 		);
+        $(entry_control_menu_descriptor.nTr).removeClass('control_menu');
 		$table.fnClose(nTr);
 	} else {
 		/* Open control menu for this entry */
@@ -406,17 +415,14 @@ function onContextMenuButtonClick() {
 								 }
 		);
 		entry_control_menu_descriptor.nTr = $table.fnOpen(nTr, entry_control_menu_descriptor.html, 'entry_control_menu');
-
+        $nTr = $(entry_control_menu_descriptor.nTr);
+        $nTr.addClass('control_menu');
+        // use internal details of fnOpen to set colspan member to right value: fix vertical alignment of context menu when only one field of track is visible.
+        var cols_count_total = $table[0].rows[0].cells.length;
+        $nTr[0].children[0].colSpan = cols_count_total;
+        
 		initTrackControlMenu(entry_control_menu_descriptor);
 		updateTrackControlMenu(entry_control_menu_descriptor);
-		/*
-			Use details of DataTables implementation to correct work of $table.fnClose() function:
-			if DataTable bServerSide flag is set, $table.fnOpen() will not add new row in aoOpenRows array.
-		*/
-		$table.fnSettings().aoOpenRows.push({
-			'nTr': entry_control_menu_descriptor.nTr,
-			'nParent': nTr
-		});
 	}
 }
 
@@ -1102,42 +1108,61 @@ function initTrackInfoDialog()
         );
         return false;
     });
-	
-	initStarRatingWidget('track_info_rating');
-}
 
-function onRatingWidgetClick(value, link) {
-	var rating_div = this.parentNode;
-	if (rating_div === undefined) {
-		return;
-	}
-	var parts = rating_div.id.split('_');
-	var playlist_id = parts.length > 2 ? parseInt(parts[2]) : control_panel_state.playlist_id;
-	var track_id = parts.length > 3 ? parseInt(parts[3]) : track_desc.playlist_id;
-	
-	aimp_manager.setTrackRating({
-								  track_id: track_id,
-								  playlist_id: playlist_id,
-								  rating: (value !== undefined ? parseInt(value) // value range is [1, 5].
-															   : 0 // set 0 rating, for AIMP it means "rating is not set".
-										  )
-								},
-								{
-								  on_success : undefined,
-								  on_exception : undefined,
-								  on_complete : undefined
-								}
-	);
+    function getTrackForRatingSet(rating_div) {
+	return { 'playlist_id': control_panel_state.playlist_id,
+		 'track_id': control_panel_state.track_id
+	       };
+    }	
+    initStarRatingWidget('track_info_rating', getTrackForRatingSet);
 }
 
 /*
-	Init star rating widget.
-	Returns rating widget.
+    Handles rating set to track by rating widget click.
+    track_getter - function with one argument: rating widget element which was clicked.
+		   returns {'playlist_id': xx, 'track_id':xx} object that specifies track to set it's rating.
 */
-function initStarRatingWidget(div_id)
+function RatingChangeHandler(track_getter) {
+    function onRatingWidgetClick(value, link) {
+	    var track_desc = track_getter(this);
+	    var playlist_id = track_desc.playlist_id;
+	    var track_id    = track_desc.track_id;
+
+	    aimp_manager.setTrackRating(  {
+					    track_id: track_id,
+					    playlist_id: playlist_id,
+					    rating: (value !== undefined ? parseInt(value) // value range is [1, 5].
+									 : 0 // set 0 rating, for AIMP it means "rating is not set".
+						     )
+					  },
+					  {
+					    on_success : undefined,
+					    on_exception : undefined,
+					    on_complete : function (response) {
+							    if ( $('#track_info_dialog').dialog('isOpen') ) {
+								updateTrackInfoDialogContent({
+								    callback: function (param) {},
+								    param: {}
+								});
+							    }
+							 }
+					  }
+	    );
+    }
+
+    return onRatingWidgetClick;
+}
+
+/*
+    Init star rating widget.
+    track_getter - function with one argument: rating widget element which was clicked.
+		   returns {'playlist_id': xx, 'track_id':xx} object that specifies track to set it's rating.
+    Returns rating widget.
+*/
+function initStarRatingWidget(div_id, track_getter)
 {
     return $('#' + div_id + ' .rating_star').rating({
-        callback: onRatingWidgetClick,
+        callback: RatingChangeHandler(track_getter),
         cancel: getText('track_info_dialog_cancel_rating'),
         cancelValue: 0
     });
