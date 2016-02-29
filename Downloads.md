@@ -1,0 +1,1 @@
+Downloads moved to [Github](https://github.com/a0ivanov/aimp-control-plugin/releases/latest).
